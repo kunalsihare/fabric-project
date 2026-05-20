@@ -1,0 +1,206 @@
+[
+  {
+    "uniqueIdentifier": "ae100fc1-9ee6-484c-bcac-20d455673cfc",
+    "payload": {
+      "name": "Monitoring KQL database",
+      "description": "Container Description",
+      "type": "kqlQueries"
+    },
+    "type": "container-v1"
+  },
+  {
+    "uniqueIdentifier": "b3a65a29-a76b-4164-ad7e-9b975adf9419",
+    "payload": {
+      "name": "Monitoring Eventhouse event",
+      "runSettings": {
+        "executionIntervalInSeconds": 21600
+      },
+      "query": {
+        "queryString": "ItemJobEventLogs\n| where Timestamp > ago(6h)\n| where ItemKind == 'Pipeline'\n| where ItemName == 'pl_p3h_bronze_main'\n| where isnotempty(JobStartTime) and isnotempty(JobEndTime)\n| extend DurationMinutes = datetime_diff('minute', JobEndTime, JobStartTime)\n| where DurationMinutes > 1\n| summarize arg_max(Timestamp, *) by ItemId, ItemName\n| project ItemName, DurationMinutes, JobStartTime, JobEndTime, JobStatus, ExecutingPrincipalId, JobInstanceId"
+      },
+      "eventhouseItem": {
+        "itemId": "94032e1e-4a31-4f40-aac4-698f3d41a741",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemType": "KustoDatabase"
+      },
+      "queryParameters": [],
+      "metadata": {
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "querySetId": "94032e1e-4a31-4f40-aac4-698f3d41a741",
+        "queryId": "a5766c2e-70ae-4152-a3ef-8900642bb99b"
+      },
+      "parentContainer": {
+        "targetUniqueIdentifier": "ae100fc1-9ee6-484c-bcac-20d455673cfc"
+      }
+    },
+    "type": "kqlSource-v1"
+  },
+  {
+    "uniqueIdentifier": "49179ddc-741a-47d9-b8e6-476d49c60d3a",
+    "payload": {
+      "name": "Monitoring Eventhouse event",
+      "parentContainer": {
+        "targetUniqueIdentifier": "ae100fc1-9ee6-484c-bcac-20d455673cfc"
+      },
+      "definition": {
+        "type": "Event",
+        "instance": "{\"steps\":[{\"id\":\"aa75054a-7833-41b9-8388-8e09279049bc\",\"name\":\"SourceEventStep\",\"rows\":[{\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"b3a65a29-a76b-4164-ad7e-9b975adf9419\"}],\"kind\":\"SourceReference\",\"name\":\"SourceSelector\"}]}],\"templateId\":\"SourceEvent\",\"templateVersion\":\"1.2.5\"}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "975921ae-8986-49b1-8346-7e03394eefa8",
+    "payload": {
+      "name": "bronze_pipeline_alert",
+      "parentContainer": {
+        "targetUniqueIdentifier": "ae100fc1-9ee6-484c-bcac-20d455673cfc"
+      },
+      "definition": {
+        "type": "Rule",
+        "instance": "{\"templateId\":\"EventTrigger\",\"templateVersion\":\"1.2.5\",\"steps\":[{\"name\":\"FieldsDefaultsStep\",\"id\":\"dea34ced-f2db-4b3b-b41a-f9ca2b38079b\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"49179ddc-741a-47d9-b8e6-476d49c60d3a\"}],\"name\":\"event\"}]}]},{\"name\":\"EventDetectStep\",\"id\":\"e24340c6-5f4f-408c-b17d-5349ae5f0748\",\"rows\":[{\"name\":\"OnEveryValue\",\"kind\":\"OnEveryValue\",\"arguments\":[]}]},{\"name\":\"ActStep\",\"id\":\"8f2e148d-a8ed-4d22-9c6d-5233b8349007\",\"rows\":[{\"name\":\"EmailBinding\",\"kind\":\"EmailMessage\",\"arguments\":[{\"name\":\"messageLocale\",\"type\":\"string\",\"value\":\"en-us\"},{\"name\":\"sentTo\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"\"}]},{\"name\":\"copyTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"bCCTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"subject\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"Activator alert bronze_pipeline_alert\"}]},{\"name\":\"headline\",\"type\":\"array\",\"values\":[{\"name\":\"string\",\"type\":\"string\",\"value\":\"bronze pipeline is long running, please check below details       \"}]},{\"name\":\"optionalMessage\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"\"}]},{\"name\":\"additionalInformation\",\"type\":\"array\",\"values\":[{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"ItemName\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"ItemName\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"DurationMinutes\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"DurationMinutes\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobStartTime\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobStartTime\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobEndTime\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobEndTime\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobStatus\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobStatus\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"ExecutingPrincipalId\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"ExecutingPrincipalId\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobInstanceId\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobInstanceId\"}],\"name\":\"reference\"}]}]}]}]}]}",
+        "settings": {
+          "shouldRun": true,
+          "shouldApplyRuleOnUpdate": true
+        }
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "14488cf1-093f-426b-aeef-1fd20a63c1a3",
+    "payload": {
+      "name": "Monitoring KQL database",
+      "description": "Container Description",
+      "type": "kqlQueries"
+    },
+    "type": "container-v1"
+  },
+  {
+    "uniqueIdentifier": "411fa705-fa02-4ae1-99a0-98e183052879",
+    "payload": {
+      "name": "Monitoring Eventhouse event",
+      "runSettings": {
+        "executionIntervalInSeconds": 21600
+      },
+      "query": {
+        "queryString": "ItemJobEventLogs\n| where Timestamp > ago(6h)\n| where ItemKind == 'Pipeline'\n| where ItemName == 'pl_p3h_silver_main'\n| where isnotempty(JobStartTime) and isnotempty(JobEndTime)\n| extend DurationMinutes = datetime_diff('minute', JobEndTime, JobStartTime)\n| where DurationMinutes > 20\n| summarize arg_max(Timestamp, *) by ItemId, ItemName\n| project ItemName, DurationMinutes, JobStartTime, JobEndTime, JobStatus, ExecutingPrincipalId, JobInstanceId"
+      },
+      "eventhouseItem": {
+        "itemId": "94032e1e-4a31-4f40-aac4-698f3d41a741",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemType": "KustoDatabase"
+      },
+      "queryParameters": [],
+      "metadata": {
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "querySetId": "94032e1e-4a31-4f40-aac4-698f3d41a741",
+        "queryId": "dfd82d46-91aa-4f2c-9085-2a7b38ad35b2"
+      },
+      "parentContainer": {
+        "targetUniqueIdentifier": "14488cf1-093f-426b-aeef-1fd20a63c1a3"
+      }
+    },
+    "type": "kqlSource-v1"
+  },
+  {
+    "uniqueIdentifier": "2f7a2bce-1024-4ecb-99fa-288370b7d5d0",
+    "payload": {
+      "name": "Monitoring Eventhouse event",
+      "parentContainer": {
+        "targetUniqueIdentifier": "14488cf1-093f-426b-aeef-1fd20a63c1a3"
+      },
+      "definition": {
+        "type": "Event",
+        "instance": "{\"steps\":[{\"id\":\"53db6551-b24d-4521-a87b-c718c528b064\",\"name\":\"SourceEventStep\",\"rows\":[{\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"411fa705-fa02-4ae1-99a0-98e183052879\"}],\"kind\":\"SourceReference\",\"name\":\"SourceSelector\"}]}],\"templateId\":\"SourceEvent\",\"templateVersion\":\"1.2.5\"}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "86a6b5e8-80b4-478a-acff-34d7042b334a",
+    "payload": {
+      "name": "silver_pipeline_alert",
+      "parentContainer": {
+        "targetUniqueIdentifier": "14488cf1-093f-426b-aeef-1fd20a63c1a3"
+      },
+      "definition": {
+        "type": "Rule",
+        "instance": "{\"templateId\":\"EventTrigger\",\"templateVersion\":\"1.2.5\",\"steps\":[{\"name\":\"FieldsDefaultsStep\",\"id\":\"f5c23e25-5a19-4cb6-84f6-6bf31a584082\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"2f7a2bce-1024-4ecb-99fa-288370b7d5d0\"}],\"name\":\"event\"}]}]},{\"name\":\"EventDetectStep\",\"id\":\"e89b4999-aee7-4da9-b824-b5263c6bcd66\",\"rows\":[{\"name\":\"OnEveryValue\",\"kind\":\"OnEveryValue\",\"arguments\":[]}]},{\"name\":\"ActStep\",\"id\":\"567f2bd6-b74a-4490-928f-fb8c8aead2b3\",\"rows\":[{\"name\":\"EmailBinding\",\"kind\":\"EmailMessage\",\"arguments\":[{\"name\":\"messageLocale\",\"type\":\"string\",\"value\":\"en-us\"},{\"name\":\"sentTo\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"\"}]},{\"name\":\"copyTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"bCCTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"subject\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"Activator alert silver_pipeline_alert\"}]},{\"name\":\"headline\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"Taking Long time for Silver layer\"}]},{\"name\":\"optionalMessage\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"\"}]},{\"name\":\"additionalInformation\",\"type\":\"array\",\"values\":[{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"ItemName\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"ItemName\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"DurationMinutes\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"DurationMinutes\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobStartTime\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobStartTime\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobEndTime\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobEndTime\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobStatus\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobStatus\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"ExecutingPrincipalId\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"ExecutingPrincipalId\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobInstanceId\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobInstanceId\"}],\"name\":\"reference\"}]}]}]}]}]}",
+        "settings": {
+          "shouldRun": true,
+          "shouldApplyRuleOnUpdate": false
+        }
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "db495a05-6984-42d1-addc-8e2bf22fd82c",
+    "payload": {
+      "name": "Monitoring KQL database",
+      "description": "Container Description",
+      "type": "kqlQueries"
+    },
+    "type": "container-v1"
+  },
+  {
+    "uniqueIdentifier": "47f1e753-f18e-47da-b445-63a3d2ea3dbd",
+    "payload": {
+      "name": "Monitoring Eventhouse event",
+      "runSettings": {
+        "executionIntervalInSeconds": 21600
+      },
+      "query": {
+        "queryString": "ItemJobEventLogs\r\n| where Timestamp > ago(6h)\r\n| where ItemKind == 'Pipeline'\r\n| where ItemName == 'pl_p3h_gold_main'\r\n| where isnotempty(JobStartTime) and isnotempty(JobEndTime)\r\n| extend DurationMinutes = datetime_diff('minute', JobEndTime, JobStartTime)\r\n| where DurationMinutes > 20\r\n| summarize arg_max(Timestamp, *) by ItemId, ItemName\r\n| project ItemName, DurationMinutes, JobStartTime, JobEndTime, JobStatus, ExecutingPrincipalId, JobInstanceId"
+      },
+      "eventhouseItem": {
+        "itemId": "94032e1e-4a31-4f40-aac4-698f3d41a741",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemType": "KustoDatabase"
+      },
+      "queryParameters": [],
+      "metadata": {
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "querySetId": "94032e1e-4a31-4f40-aac4-698f3d41a741",
+        "queryId": "3b05047f-254f-4e93-bb3f-41582809849b"
+      },
+      "parentContainer": {
+        "targetUniqueIdentifier": "db495a05-6984-42d1-addc-8e2bf22fd82c"
+      }
+    },
+    "type": "kqlSource-v1"
+  },
+  {
+    "uniqueIdentifier": "0607ca9f-7157-4a99-8965-3634f8ad4ae7",
+    "payload": {
+      "name": "Monitoring Eventhouse event",
+      "parentContainer": {
+        "targetUniqueIdentifier": "db495a05-6984-42d1-addc-8e2bf22fd82c"
+      },
+      "definition": {
+        "type": "Event",
+        "instance": "{\"steps\":[{\"id\":\"05994c3c-8e6d-4d2f-9acd-7462c960069e\",\"name\":\"SourceEventStep\",\"rows\":[{\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"47f1e753-f18e-47da-b445-63a3d2ea3dbd\"}],\"kind\":\"SourceReference\",\"name\":\"SourceSelector\"}]}],\"templateId\":\"SourceEvent\",\"templateVersion\":\"1.2.5\"}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "3e36e748-7bc7-4dbe-b8d1-4955eafbc5a0",
+    "payload": {
+      "name": "gold_pipeline_alert",
+      "parentContainer": {
+        "targetUniqueIdentifier": "db495a05-6984-42d1-addc-8e2bf22fd82c"
+      },
+      "definition": {
+        "type": "Rule",
+        "instance": "{\"templateId\":\"EventTrigger\",\"templateVersion\":\"1.2.5\",\"steps\":[{\"name\":\"FieldsDefaultsStep\",\"id\":\"a5ddb669-760b-4a98-84c8-26d597b809cf\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"0607ca9f-7157-4a99-8965-3634f8ad4ae7\"}],\"name\":\"event\"}]}]},{\"name\":\"EventDetectStep\",\"id\":\"a37c9d62-588e-4192-a054-fe11f67fb064\",\"rows\":[{\"name\":\"OnEveryValue\",\"kind\":\"OnEveryValue\",\"arguments\":[]}]},{\"name\":\"ActStep\",\"id\":\"a8957c3c-b164-4908-832d-f7f2c111714f\",\"rows\":[{\"name\":\"EmailBinding\",\"kind\":\"EmailMessage\",\"arguments\":[{\"name\":\"messageLocale\",\"type\":\"string\",\"value\":\"en-us\"},{\"name\":\"sentTo\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"\"}]},{\"name\":\"copyTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"bCCTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"subject\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"Activator alert gold_pipeline_alert\"}]},{\"name\":\"headline\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"Gold Layer is taking long time to complete\"}]},{\"name\":\"optionalMessage\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"\"}]},{\"name\":\"additionalInformation\",\"type\":\"array\",\"values\":[{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"ItemName\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"ItemName\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"DurationMinutes\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"DurationMinutes\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobStartTime\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobStartTime\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobEndTime\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobEndTime\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobStatus\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobStatus\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"ExecutingPrincipalId\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"ExecutingPrincipalId\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"JobInstanceId\"},{\"kind\":\"EventFieldReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"JobInstanceId\"}],\"name\":\"reference\"}]}]}]}]}]}",
+        "settings": {
+          "shouldRun": true,
+          "shouldApplyRuleOnUpdate": false
+        }
+      }
+    },
+    "type": "timeSeriesView-v1"
+  }
+]

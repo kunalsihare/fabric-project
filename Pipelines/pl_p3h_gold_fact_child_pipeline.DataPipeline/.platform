@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_p3h_gold_fact_child_pipeline"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "1b855ee8-a84d-b6c6-4a04-8c98b1b7ec78"
+  }
+}

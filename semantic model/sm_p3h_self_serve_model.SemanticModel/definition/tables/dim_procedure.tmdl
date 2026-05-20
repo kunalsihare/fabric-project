@@ -1,0 +1,69 @@
+table dim_procedure
+	lineageTag: df9b4a66-c2b3-4a85-85fb-a69afb6b7f5b
+	sourceLineageTag: [dimension].[dim_procedure]
+
+	column procedure_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c8ddd0e-e22d-4f94-8dc2-f2aaee0bcc17
+		sourceLineageTag: procedure_sk
+		summarizeBy: none
+		sourceColumn: procedure_sk
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column procedure_code
+		dataType: string
+		lineageTag: 7d4df56a-2bd1-4366-9b51-9e1359eca7f8
+		sourceLineageTag: procedure_code
+		summarizeBy: none
+		sourceColumn: procedure_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column procedure_desc
+		dataType: string
+		lineageTag: 899105ee-675a-41aa-9fce-bd6ebca2cf8f
+		sourceLineageTag: procedure_desc
+		summarizeBy: none
+		sourceColumn: procedure_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: 162d7e2e-1fbd-4f41-b2d2-23b184e12deb
+		sourceLineageTag: category
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column cost_category
+		dataType: string
+		lineageTag: f804df07-87da-452c-8659-ad7ad0d4bba0
+		sourceLineageTag: cost_category
+		summarizeBy: none
+		sourceColumn: cost_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column load_ts
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8f14be7b-1290-4034-88a1-249fc5e6cfab
+		sourceLineageTag: load_ts
+		summarizeBy: none
+		sourceColumn: load_ts
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_procedure = entity
+		mode: directLake
+		source
+			entityName: dim_procedure
+			schemaName: dimension
+			expressionSource: 'DirectLake - wh_p3h_p3h_warehouse'
+

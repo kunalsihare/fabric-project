@@ -1,0 +1,147 @@
+table dim_member
+	lineageTag: 745199c0-69dc-4685-b674-e20b3e718e21
+	sourceLineageTag: [dimension].[dim_member]
+
+	column member_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 56a1907e-147e-4f6f-856b-4442cf77ab1d
+		sourceLineageTag: member_sk
+		summarizeBy: none
+		sourceColumn: member_sk
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column member_id
+		dataType: string
+		lineageTag: f2ec0d24-5844-4d61-b764-cc5091669b37
+		sourceLineageTag: member_id
+		summarizeBy: none
+		sourceColumn: member_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column member_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 8bf831ce-57ee-4a98-9636-51be93e80f7b
+		sourceLineageTag: member_number
+		summarizeBy: none
+		sourceColumn: member_number
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column first_name
+		dataType: string
+		lineageTag: 68d73eed-877c-4665-b687-b840d51ade42
+		sourceLineageTag: first_name
+		summarizeBy: none
+		sourceColumn: first_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_name
+		dataType: string
+		lineageTag: 781b3c32-1434-489c-a74d-4f47a83f7e5c
+		sourceLineageTag: last_name
+		summarizeBy: none
+		sourceColumn: last_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		lineageTag: 0eb012f6-fdb1-4461-9cb4-a4155d909e77
+		sourceLineageTag: gender
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column dob
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6a35839a-fbd2-4db4-b0e2-1f84b447ab51
+		sourceLineageTag: dob
+		summarizeBy: none
+		sourceColumn: dob
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: a20a90af-546a-4d06-b667-5648bacf5972
+		sourceLineageTag: city
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: 5986a45d-2ae6-43f7-b3f4-7f22fb8cd31d
+		sourceLineageTag: state
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column plan_id
+		dataType: string
+		lineageTag: 2961039b-d059-4919-ac74-6d88f44deac4
+		sourceLineageTag: plan_id
+		summarizeBy: none
+		sourceColumn: plan_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column enrollment_status
+		dataType: string
+		lineageTag: bf7f946b-9090-4e56-aa2a-898a44700254
+		sourceLineageTag: enrollment_status
+		summarizeBy: none
+		sourceColumn: enrollment_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1cd8c95c-95af-4e03-85d5-78cd89904603
+		sourceLineageTag: effective_date
+		summarizeBy: none
+		sourceColumn: effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column termination_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d75c56c1-7a2d-4bf2-b7e2-e5ea97c244e0
+		sourceLineageTag: termination_date
+		summarizeBy: none
+		sourceColumn: termination_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column load_ts
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0992cbb4-7848-4573-83e7-96b3e30e34bd
+		sourceLineageTag: load_ts
+		summarizeBy: none
+		sourceColumn: load_ts
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_member = entity
+		mode: directLake
+		source
+			entityName: dim_member
+			schemaName: dimension
+			expressionSource: 'DirectLake - wh_p3h_p3h_warehouse'
+

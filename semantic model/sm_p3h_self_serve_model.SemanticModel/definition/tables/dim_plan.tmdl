@@ -1,0 +1,91 @@
+table dim_plan
+	lineageTag: afac3948-4f07-4e38-9c05-ab5cc2a3f2f2
+	sourceLineageTag: [dimension].[dim_plan]
+
+	column plan_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: f691acfb-cd7f-4d4e-b3e1-0970d6d29492
+		sourceLineageTag: plan_sk
+		summarizeBy: none
+		sourceColumn: plan_sk
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column plan_id
+		dataType: string
+		lineageTag: 13b561b5-9c48-4d9a-aa72-b51f97b1e944
+		sourceLineageTag: plan_id
+		summarizeBy: none
+		sourceColumn: plan_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column plan_name
+		dataType: string
+		lineageTag: a2340ad9-cd25-4fac-90a2-99c1038b02ff
+		sourceLineageTag: plan_name
+		summarizeBy: none
+		sourceColumn: plan_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column plan_type
+		dataType: string
+		lineageTag: 1520aa84-4ba2-49a1-9133-ef3ee6f38f11
+		sourceLineageTag: plan_type
+		summarizeBy: none
+		sourceColumn: plan_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column coverage_type
+		dataType: string
+		lineageTag: f2369add-e9a3-4c00-a318-fbb1891baf7c
+		sourceLineageTag: coverage_type
+		summarizeBy: none
+		sourceColumn: coverage_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a6e62f4f-6971-4183-8eb8-015e9ab2bf44
+		sourceLineageTag: effective_date
+		summarizeBy: none
+		sourceColumn: effective_date
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column termination_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7b9e1e80-f450-4e66-9d80-b94fd574700a
+		sourceLineageTag: termination_date
+		summarizeBy: none
+		sourceColumn: termination_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column load_ts
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7d516c9b-28a9-4b6d-ad93-ba96e1a9921d
+		sourceLineageTag: load_ts
+		summarizeBy: none
+		sourceColumn: load_ts
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_plan = entity
+		mode: directLake
+		source
+			entityName: dim_plan
+			schemaName: dimension
+			expressionSource: 'DirectLake - wh_p3h_p3h_warehouse'
+

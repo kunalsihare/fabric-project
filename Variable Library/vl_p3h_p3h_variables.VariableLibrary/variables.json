@@ -1,0 +1,77 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/variableLibrary/definition/variables/1.0.0/schema.json",
+  "variables": [
+    {
+      "name": "LH_Name",
+      "note": "",
+      "type": "String",
+      "value": "lh_p3h_p3hp"
+    },
+    {
+      "name": "LH_ID",
+      "note": "",
+      "type": "String",
+      "value": "373a2aa8-e221-4d9f-8a2a-a325268eb19f"
+    },
+    {
+      "name": "WS_ID",
+      "note": "",
+      "type": "String",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "name": "config_schema_name",
+      "note": "",
+      "type": "String",
+      "value": "cfg"
+    },
+    {
+      "name": "log_schema_name",
+      "note": "",
+      "type": "String",
+      "value": "logs"
+    },
+    {
+      "name": "bronze_schema_name",
+      "note": "",
+      "type": "String",
+      "value": "bronze"
+    },
+    {
+      "name": "silver_schema_name",
+      "note": "",
+      "type": "String",
+      "value": "silver"
+    },
+    {
+      "name": "dimension_schema_name",
+      "note": "",
+      "type": "String",
+      "value": "dimension"
+    },
+    {
+      "name": "fact_schema_name",
+      "note": "",
+      "type": "String",
+      "value": "fact"
+    },
+    {
+      "name": "WH_SQL_END_POINT",
+      "note": "",
+      "type": "String",
+      "value": "<your-endpoint>.datawarehouse.fabric.microsoft.com"
+    },
+    {
+      "name": "WH_ID",
+      "note": "",
+      "type": "String",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "name": "WH_NAME",
+      "note": "",
+      "type": "String",
+      "value": "wh_p3h_p3h_warehouse"
+    }
+  ]
+}

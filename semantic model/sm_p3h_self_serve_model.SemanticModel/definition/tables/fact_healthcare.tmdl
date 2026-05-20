@@ -1,0 +1,246 @@
+table fact_healthcare
+	lineageTag: 9777884b-b91c-4e16-8dd9-577bc70982f9
+	sourceLineageTag: [fact].[fact_healthcare]
+
+	measure 'Total Amount' = SUM('fact_healthcare'[amount])
+		lineageTag: 957886c8-57a7-4bdd-8698-a771d4cbbf32
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Encounters' = DISTINCTCOUNT('fact_healthcare'[encounter_id])
+		formatString: 0
+		lineageTag: 0d231200-3afb-46cc-b4c1-dc060252855c
+
+		changedProperty = Name
+
+	measure 'Avg Cost per Encounter' = DIVIDE([Total Amount], [Total Encounters])
+		lineageTag: 1fe7515a-8e45-49f5-96b4-993f6320ac4a
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Members' = DISTINCTCOUNT('fact_healthcare'[member_sk])
+		formatString: 0
+		lineageTag: f701ab59-65bf-489e-a3fe-bb6de35dedfb
+
+		changedProperty = Name
+
+	measure 'Avg Cost per Member' = DIVIDE([Total Amount], [Total Members])
+		lineageTag: cb0a200f-87f6-47b3-8209-b84b971b0d02
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Amount YTD' = TOTALYTD([Total Amount], 'dimdate'[Date])
+		lineageTag: e178dfc2-cf82-426b-9bf5-f1b0505ddd4b
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Amount PY' = CALCULATE([Total Amount], SAMEPERIODLASTYEAR('dimdate'[Date]))
+		lineageTag: fffad1e7-4cff-41d9-87a2-5e5bb91a8560
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY Growth %' =
+			
+			VAR _prev = [Amount PY]
+			RETURN DIVIDE([Total Amount] - _prev, _prev)
+		lineageTag: c4ce359f-3bc1-4133-8da1-2404facd0203
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Top 5 Procedures' =
+			
+			CALCULATE(
+			    [Total Amount],
+			    TOPN(5, ALL('dim_procedure'[procedure_desc]), [Total Amount])
+			)
+		lineageTag: 372d67a3-3701-4cb2-b6c0-6346e01b3468
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% of Total Plan Cost' = ```
+			
+			DIVIDE(
+			    [Total Amount], 
+			    CALCULATE([Total Amount], ALL('dim_plan'))
+			)
+			```
+		lineageTag: ace94d4d-a8cc-4bca-8194-1f17ac92f512
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fact_healthcare_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: db510ac5-3eeb-4756-b8ae-64ea3addda30
+		sourceLineageTag: fact_healthcare_sk
+		summarizeBy: none
+		sourceColumn: fact_healthcare_sk
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column claim_id
+		dataType: string
+		lineageTag: b222c688-3a0b-4ee9-b8f1-739269e3a4b1
+		sourceLineageTag: claim_id
+		summarizeBy: none
+		sourceColumn: claim_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column encounter_id
+		dataType: string
+		lineageTag: 5ac8f3f2-7d9f-4b1b-a7ad-9f8333957aa5
+		sourceLineageTag: encounter_id
+		summarizeBy: none
+		sourceColumn: encounter_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_id
+		dataType: string
+		lineageTag: 78c07c75-1768-4258-af4e-3522a289c061
+		sourceLineageTag: payment_id
+		summarizeBy: none
+		sourceColumn: payment_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column member_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: b4b750db-fa92-494e-b9ca-8a4ca7309982
+		sourceLineageTag: member_sk
+		summarizeBy: none
+		sourceColumn: member_sk
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column provider_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: e45199c4-e9d4-474f-9f94-72e27cf037dd
+		sourceLineageTag: provider_sk
+		summarizeBy: none
+		sourceColumn: provider_sk
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column plan_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e9f5595-af03-41eb-9986-d10898c5064a
+		sourceLineageTag: plan_sk
+		summarizeBy: none
+		sourceColumn: plan_sk
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column diagnosis_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: d2e6da28-b6b5-4319-bfb3-38cfdfbf5444
+		sourceLineageTag: diagnosis_sk
+		summarizeBy: none
+		sourceColumn: diagnosis_sk
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column procedure_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: fc5e384e-4656-4b56-9576-770854edb1bb
+		sourceLineageTag: procedure_sk
+		summarizeBy: none
+		sourceColumn: procedure_sk
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1a59e91f-6123-433c-8d11-8a88bbb07975
+		sourceLineageTag: date_key
+		summarizeBy: none
+		sourceColumn: date_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column line_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 9e82228b-c715-4774-8f9e-e8599d15b7ff
+		sourceLineageTag: line_number
+		summarizeBy: none
+		sourceColumn: line_number
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column amount
+		dataType: double
+		lineageTag: 7d71869e-3a47-4e10-91fe-cb045944251e
+		sourceLineageTag: amount
+		summarizeBy: sum
+		sourceColumn: amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column transaction_type
+		dataType: string
+		lineageTag: 93592161-de13-4e20-894e-dd93f0ab28d9
+		sourceLineageTag: transaction_type
+		summarizeBy: none
+		sourceColumn: transaction_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column load_ts
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c00931e0-8cf8-4f8a-b019-ee08f8040230
+		sourceLineageTag: load_ts
+		summarizeBy: none
+		sourceColumn: load_ts
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_healthcare = entity
+		mode: directLake
+		source
+			entityName: fact_healthcare
+			schemaName: fact
+			expressionSource: 'DirectLake - wh_p3h_p3h_warehouse'
+

@@ -1,0 +1,9 @@
+table_id,domain,dataset_name,folder_path,file_format,is_active,is_full_load,last_watermark_value,delimiter
+1,member,member_master,/raw/member/member_master/,parquet,1,1,NULL,NULL
+2,member,member_enrollment,/raw/member/member_enrollment/,csv,1,0,1900-01-01,","
+3,provider,provider_master,/raw/provider/provider_master/,parquet,1,1,NULL,NULL
+4,provider,provider_contract,/raw/provider/provider_contract/,csv,1,1,NULL,","
+5,claims,claim_header,/raw/claims/claim_header/,parquet,1,0,1900-01-01,NULL
+6,claims,claim_line,/raw/claims/claim_line/,parquet,1,0,1900-01-01,NULL
+7,clinical,encounter,/raw/clinical/encounter/,parquet,1,0,1900-01-01,NULL
+8,finance,capitation_payment,/raw/finance/capitation_payment/,csv,1,0,1900-01-01,","

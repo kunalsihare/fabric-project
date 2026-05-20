@@ -1,0 +1,115 @@
+table dimdate
+	lineageTag: ac2a6313-838a-417c-847c-990df0994d39
+	sourceLineageTag: [dimension].[dimdate]
+	dataCategory: Time
+
+	column datekey
+		dataType: int64
+		formatString: 0
+		lineageTag: 8bc70495-a4e0-4232-be61-544a08bd531c
+		sourceLineageTag: datekey
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: datekey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: General Date
+		lineageTag: a8d7de4a-da74-40a5-8f58-a997c1355a5d
+		sourceLineageTag: Date
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 24b88711-64fd-4361-8053-824025d70774
+		sourceLineageTag: year
+		summarizeBy: none
+		sourceColumn: year
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: ec32e457-11d8-482e-99be-e2a631054f57
+		sourceLineageTag: quarter
+		summarizeBy: none
+		sourceColumn: quarter
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column month
+		dataType: int64
+		formatString: 0
+		lineageTag: db993f60-93ef-41f7-9ab6-da7a4f3ae97c
+		sourceLineageTag: month
+		summarizeBy: none
+		sourceColumn: month
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column monthname
+		dataType: string
+		lineageTag: ab87d3de-ac97-4ad0-b785-c3ce1bca4b0b
+		sourceLineageTag: monthname
+		summarizeBy: none
+		sourceColumn: monthname
+		sortByColumn: month
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column weekofyear
+		dataType: int64
+		formatString: 0
+		lineageTag: 1cfdc6b8-a2e8-4649-b8a0-abfbbbceea9b
+		sourceLineageTag: weekofyear
+		summarizeBy: none
+		sourceColumn: weekofyear
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column dayofweek
+		dataType: string
+		lineageTag: 24bd63de-eecd-490c-99be-785df3cb2ba7
+		sourceLineageTag: dayofweek
+		summarizeBy: none
+		sourceColumn: dayofweek
+
+		annotation SummarizationSetBy = Automatic
+
+	column dayofweeknumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d511aca-827d-486d-8170-b9399afaf9c5
+		sourceLineageTag: dayofweeknumber
+		summarizeBy: none
+		sourceColumn: dayofweeknumber
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	partition dimdate = entity
+		mode: directLake
+		source
+			entityName: dimdate
+			schemaName: dimension
+			expressionSource: 'DirectLake - wh_p3h_p3h_warehouse'
+

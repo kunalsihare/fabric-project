@@ -1,0 +1,305 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Switch",
+        "typeProperties": {
+          "on": {
+            "value": "@string(pipeline().parameters.table_id)",
+            "type": "Expression"
+          },
+          "cases": [
+            {
+              "value": "14",
+              "activities": [
+                {
+                  "type": "TridentNotebook",
+                  "typeProperties": {
+                    "notebookId": "82783f2b-9e33-a7db-4191-12da4487c76f",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "parameters": {
+                      "pipeline_run_id": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_run_id",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      },
+                      "pipeline_name": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_name",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      },
+                      "table_id": {
+                        "value": {
+                          "value": "@pipeline().parameters.table_id",
+                          "type": "Expression"
+                        },
+                        "type": "int"
+                      },
+                      "pipeline_start_time": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_start_time",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureInput": false,
+                    "secureOutput": false
+                  },
+                  "name": "Gold_dimdiagnosis_notebook",
+                  "dependsOn": []
+                }
+              ]
+            },
+            {
+              "value": "15",
+              "activities": [
+                {
+                  "type": "TridentNotebook",
+                  "typeProperties": {
+                    "notebookId": "fa8e5d51-501a-af4e-402c-2ed5b35a3260",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "parameters": {
+                      "pipeline_run_id": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_run_id",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      },
+                      "pipeline_name": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_name",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      },
+                      "table_id": {
+                        "value": {
+                          "value": "@pipeline().parameters.table_id",
+                          "type": "Expression"
+                        },
+                        "type": "int"
+                      },
+                      "pipeline_start_time": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_start_time",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureInput": false,
+                    "secureOutput": false
+                  },
+                  "name": "Gold_dimmember_notebook",
+                  "dependsOn": []
+                }
+              ]
+            },
+            {
+              "value": "16",
+              "activities": [
+                {
+                  "type": "TridentNotebook",
+                  "typeProperties": {
+                    "notebookId": "097532d3-6242-8400-482c-c47048878e60",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "parameters": {
+                      "pipeline_run_id": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_run_id",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      },
+                      "pipeline_name": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_name",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      },
+                      "table_id": {
+                        "value": {
+                          "value": "@pipeline().parameters.table_id",
+                          "type": "Expression"
+                        },
+                        "type": "int"
+                      },
+                      "pipeline_start_time": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_start_time",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureInput": false,
+                    "secureOutput": false
+                  },
+                  "name": "Gold_dimension_plan_notebook",
+                  "dependsOn": []
+                }
+              ]
+            },
+            {
+              "value": "17",
+              "activities": [
+                {
+                  "type": "TridentNotebook",
+                  "typeProperties": {
+                    "notebookId": "fe5becbd-9cb9-8766-4da0-ff15be3cb42b",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "parameters": {
+                      "pipeline_run_id": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_run_id",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      },
+                      "pipeline_name": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_name",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      },
+                      "table_id": {
+                        "value": {
+                          "value": "@pipeline().parameters.table_id",
+                          "type": "Expression"
+                        },
+                        "type": "int"
+                      },
+                      "pipeline_start_time": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_start_time",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureInput": false,
+                    "secureOutput": false
+                  },
+                  "name": "Gold_dimension_procedure_notebook",
+                  "dependsOn": []
+                }
+              ]
+            },
+            {
+              "value": "18",
+              "activities": [
+                {
+                  "type": "TridentNotebook",
+                  "typeProperties": {
+                    "notebookId": "3c19cfef-334e-80a8-4b87-fca07ed5ca1c",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "parameters": {
+                      "pipeline_run_id": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_run_id",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      },
+                      "pipeline_name": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_name",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      },
+                      "table_id": {
+                        "value": {
+                          "value": "@pipeline().parameters.table_id",
+                          "type": "Expression"
+                        },
+                        "type": "int"
+                      },
+                      "pipeline_start_time": {
+                        "value": {
+                          "value": "@pipeline().parameters.pipeline_start_time",
+                          "type": "Expression"
+                        },
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureInput": false,
+                    "secureOutput": false
+                  },
+                  "name": "Gold_dimension_provider_notebook",
+                  "dependsOn": []
+                }
+              ]
+            }
+          ],
+          "defaultActivities": [
+            {
+              "type": "Fail",
+              "typeProperties": {
+                "message": {
+                  "value": "@concat(\n    'Invalid table_id received: ',\n    string(pipeline().parameters.table_id),\n    ' | Pipeline: ',\n    pipeline().parameters.pipeline_name\n)",
+                  "type": "Expression"
+                },
+                "errorCode": {
+                  "value": "@concat('INVALID_TABLE_', string(pipeline().parameters.table_id))",
+                  "type": "Expression"
+                }
+              },
+              "name": "Invalid_table_id_fail",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "pl_p3h_gold_dimension_child_switch",
+        "dependsOn": []
+      }
+    ],
+    "parameters": {
+      "pipeline_run_id": {
+        "type": "string"
+      },
+      "pipeline_name": {
+        "type": "string"
+      },
+      "table_id": {
+        "type": "int"
+      },
+      "pipeline_start_time": {
+        "type": "string"
+      }
+    }
+  }
+}

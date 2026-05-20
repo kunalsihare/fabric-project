@@ -1,0 +1,129 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "ff562998-01ac-8683-4c49-8aa534bd5404",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "table_id": {
+              "value": {
+                "value": "@pipeline().parameters.table_id",
+                "type": "Expression"
+              },
+              "type": "int"
+            },
+            "folder_path": {
+              "value": {
+                "value": "@pipeline().parameters.folder_path",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "update_new_files_for_processing",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "fdd2fab0-31f4-b540-4541-7ccc18e54811",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "pipeline_run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "pipeline_name": {
+              "value": {
+                "value": "@pipeline().PipelineName",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "table_id": {
+              "value": {
+                "value": "@pipeline().parameters.table_id",
+                "type": "Expression"
+              },
+              "type": "int"
+            },
+            "pipeline_start_time": {
+              "value": {
+                "value": "@pipeline().TriggerTime",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "is_full_load": {
+              "value": {
+                "value": "@pipeline().parameters.is_full_load",
+                "type": "Expression"
+              },
+              "type": "bool"
+            },
+            "file_format": {
+              "value": {
+                "value": "@pipeline().parameters.file_format",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "delimiter": {
+              "value": {
+                "value": "@pipeline().parameters.delimiter",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "bronze_table_load",
+        "dependsOn": [
+          {
+            "activity": "update_new_files_for_processing",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "table_id": {
+        "type": "int"
+      },
+      "folder_path": {
+        "type": "string"
+      },
+      "is_full_load": {
+        "type": "bool"
+      },
+      "file_format": {
+        "type": "string"
+      },
+      "delimiter": {
+        "type": "string"
+      }
+    }
+  }
+}

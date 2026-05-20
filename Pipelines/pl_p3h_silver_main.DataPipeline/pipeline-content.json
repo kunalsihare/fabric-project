@@ -1,0 +1,142 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource"
+          },
+          "datasetSettings": {
+            "type": "LakehouseTable",
+            "typeProperties": {
+              "schema": {
+                "value": "@pipeline().libraryVariables.vl_p3h_p3h_variables_config_schema_name",
+                "type": "Expression"
+              },
+              "table": "cfg_table_schema"
+            },
+            "schema": [],
+            "linkedService": {
+              "name": "lh_p3h_p3hp",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "268eb19f-a325-8a2a-4d9f-e221373a2aa8",
+                  "workspaceId": "00000000-0000-0000-0000-000000000000",
+                  "rootFolder": "Tables"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "firstRowOnly": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Lookup_table_config",
+        "dependsOn": []
+      },
+      {
+        "type": "Filter",
+        "typeProperties": {
+          "items": {
+            "value": "@activity('Lookup_table_config').output.value",
+            "type": "Expression"
+          },
+          "condition": {
+            "value": "@and(\n  equals(toLower(item().layer), 'silver'),\n  equals(item().is_active, true)\n)",
+            "type": "Expression"
+          }
+        },
+        "name": "filter_silver_tables",
+        "dependsOn": [
+          {
+            "activity": "Lookup_table_config",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "isSequential": true,
+          "items": {
+            "value": "@activity('filter_silver_tables').output.value",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "InvokePipeline",
+              "typeProperties": {
+                "parameters": {
+                  "pipeline_run_id": {
+                    "value": "@pipeline().RunId",
+                    "type": "Expression"
+                  },
+                  "pipeline_name": {
+                    "value": "@pipeline().PipelineName",
+                    "type": "Expression"
+                  },
+                  "table_id": {
+                    "value": "@item().table_id",
+                    "type": "Expression"
+                  },
+                  "pipeline_start_time": {
+                    "value": "@pipeline().TriggerTime",
+                    "type": "Expression"
+                  }
+                },
+                "waitOnCompletion": true,
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "pipelineId": "a52bb2a2-56e2-975b-4897-76739f3d8705",
+                "operationType": "InvokeFabricPipeline"
+              },
+              "externalReferences": {
+                "connection": "00000000-0000-0000-0000-000000000000"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Invoke pipeline1",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "loop through tables",
+        "dependsOn": [
+          {
+            "activity": "filter_silver_tables",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "libraryVariables": {
+      "vl_p3h_p3h_variables_config_schema_name": {
+        "type": "String",
+        "variableName": "config_schema_name",
+        "libraryName": "vl_p3h_p3h_variables"
+      }
+    },
+    "variables": {
+      "master_run_id": {
+        "type": "String"
+      }
+    }
+  }
+}

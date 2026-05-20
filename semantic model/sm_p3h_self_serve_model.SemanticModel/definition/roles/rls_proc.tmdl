@@ -1,0 +1,9 @@
+role rls_proc
+	modelPermission: read
+
+	tablePermission UserSecurityMapping =
+			UserSecurityMapping[user_name] = USERPRINCIPALNAME()
+			    && UserSecurityMapping[scope] = "PROC"
+
+	annotation PBI_Id = f619373624e446b7b42b0141d459a383
+

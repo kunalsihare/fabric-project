@@ -1,0 +1,37 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {},
+  "name": "",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "pStartDate": {
+      "queryId": "23a15367-c3b8-4d0d-a9ce-5b4f1a2d17ed",
+      "queryName": "pStartDate",
+      "loadEnabled": false
+    },
+    "pEndDate": {
+      "queryId": "69f3f7ac-d892-426d-8984-e6a89eeeae17",
+      "queryName": "pEndDate",
+      "loadEnabled": false
+    },
+    "DateQuery": {
+      "queryId": "433c870f-0453-4a54-8c7c-36e2fd74b248",
+      "queryName": "DateQuery"
+    },
+    "DateQuery_DataDestination": {
+      "queryId": "e0c39870-6d28-4acf-995a-ce557c5cd532",
+      "queryName": "DateQuery_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "Warehouse",
+      "kind": "Warehouse",
+      "connectionId": "{\"ClusterId\":\"00000000-0000-0000-0000-000000000000\",\"DatasourceId\":\"00000000-0000-0000-0000-000000000000\"}"
+    }
+  ],
+  "parametric": true
+}

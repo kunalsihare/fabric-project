@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "date_dimension_gen2",
+        "type": "RefreshDataflow",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "dataflowId": "5a4edaa8-9cf5-40be-8e2f-592f8e61387c",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "notifyOption": "NoNotification",
+          "parameters": {
+            "pStartDate": {
+              "value": "2014-01-01",
+              "type": "Date"
+            },
+            "pEndDate": {
+              "value": "2035-12-31",
+              "type": "Date"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

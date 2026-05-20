@@ -1,0 +1,50 @@
+table UserSecurityMapping
+	lineageTag: da99182d-079c-4b48-85a8-e4d2c8c5c9ff
+	sourceLineageTag: [security].[UserSecurityMapping]
+
+	column ID
+		dataType: int64
+		formatString: 0
+		lineageTag: b7339827-3bd5-47c9-8518-51017eb87da3
+		sourceLineageTag: ID
+		summarizeBy: none
+		sourceColumn: ID
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column user_name
+		dataType: string
+		lineageTag: bab62a79-fe8d-4f79-bf79-84219a93448d
+		sourceLineageTag: user_name
+		summarizeBy: none
+		sourceColumn: user_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column scope_value
+		dataType: string
+		lineageTag: 85e0a2c8-c845-4123-b5bb-1a584478e18e
+		sourceLineageTag: scope_value
+		summarizeBy: none
+		sourceColumn: scope_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column scope
+		dataType: string
+		lineageTag: f02000d5-d231-4e32-a648-50576ca20636
+		sourceLineageTag: scope
+		summarizeBy: none
+		sourceColumn: scope
+
+		annotation SummarizationSetBy = Automatic
+
+	partition UserSecurityMapping = entity
+		mode: directLake
+		source
+			entityName: UserSecurityMapping
+			schemaName: security
+			expressionSource: 'DirectLake - wh_p3h_p3h_warehouse'
+

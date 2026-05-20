@@ -1,0 +1,10 @@
+rule_id,column_id,rule_type,rule_value,is_active,created_at
+1,902,null_check,,1,current_timestamp()
+2,911,null_check,,1,current_timestamp()
+3,902,unique_key,,1,current_timestamp()
+4,906,regex,^(M|F)$,1,current_timestamp()
+6,1002,null_check,,1,current_timestamp()
+7,1002,unique_key,,1,current_timestamp()
+8,1004,regex,^PROV_.*$,1,current_timestamp()
+9,1101,null_check,,1,current_timestamp()
+10,1301,null_check,,1,current_timestamp()

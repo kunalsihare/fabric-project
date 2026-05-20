@@ -1,0 +1,202 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "InvokePipeline",
+        "typeProperties": {
+          "parameters": {},
+          "waitOnCompletion": true,
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "df74025d-30a8-9517-42e8-16776539d97e",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "load_bronze_layer",
+        "dependsOn": []
+      },
+      {
+        "type": "InvokePipeline",
+        "typeProperties": {
+          "parameters": {},
+          "waitOnCompletion": true,
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "7e6ddfa2-320a-bb93-4cc6-c88aa523af35",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "load_silver_layer",
+        "dependsOn": [
+          {
+            "activity": "load_bronze_layer",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "@concat(\n    'Hello Team! The Bronze Pipeline has completed with status: ', activity('load_bronze_layer').Status,\n    '\n    \n    Details:\n    ----------------------------------\n    Pipeline Run ID: ', pipeline().RunId,\n    '\n    Error (if any): ', \n    if(equals(activity('load_bronze_layer').Status, 'Failed'), \n       activity('load_bronze_layer').Error.message, \n       'None')\n)",
+          "to": "",
+          "subject": {
+            "value": "Bronze Pipeline Run: @{pipeline().RunId}",
+            "type": "Expression"
+          }
+        },
+        "externalReferences": {
+          "connection": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "bronze_pipeline_status",
+        "dependsOn": [
+          {
+            "activity": "load_bronze_layer",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "InvokePipeline",
+        "typeProperties": {
+          "parameters": {},
+          "waitOnCompletion": true,
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "6adcae31-fe32-a80b-44a2-372fa74d6bc5",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "load_gold_layer",
+        "dependsOn": [
+          {
+            "activity": "load_silver_layer",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "InvokeCopyJob",
+        "typeProperties": {
+          "copyJobId": "77d1dc9b-f795-a684-424a-390ed3f19f8a",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "externalReferences": {
+          "connection": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "lh_to_wh",
+        "dependsOn": [
+          {
+            "activity": "load_gold_layer",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "<p>@concat( &nbsp;&nbsp;&nbsp;'Hello Team! The Silver Pipeline has completed with status: ', activity('load_silver_layer').Status, &nbsp;&nbsp;&nbsp;' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Details: &nbsp;&nbsp;&nbsp;---------------------------------- &nbsp;&nbsp;&nbsp;Pipeline Run ID: ', pipeline().RunId, &nbsp;&nbsp;&nbsp;' &nbsp;&nbsp;&nbsp;Error (if any): ', &nbsp;&nbsp;&nbsp;&nbsp;if(equals(activity('load_silver_layer').Status, 'Failed'), &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;activity('load_silver_layer').Error.message, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'None'))</p>",
+          "to": "",
+          "subject": {
+            "value": "Silver Pipeline Run: @{pipeline().RunId}",
+            "type": "Expression"
+          }
+        },
+        "externalReferences": {
+          "connection": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "silver_pipeline_status",
+        "dependsOn": [
+          {
+            "activity": "load_silver_layer",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "<p>@concat( &nbsp;&nbsp;&nbsp;'Hello Team! The Gold Pipeline has completed with status: ', activity('load_gold_layer').Status, &nbsp;&nbsp;&nbsp;' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Details: &nbsp;&nbsp;&nbsp;---------------------------------- &nbsp;&nbsp;&nbsp;Pipeline Run ID: ', pipeline().RunId, &nbsp;&nbsp;&nbsp;' &nbsp;&nbsp;&nbsp;Error (if any): ', &nbsp;&nbsp;&nbsp;&nbsp;if(equals(activity('load_gold_layer').Status, 'Failed'), &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;activity('load_gold_layer').Error.message, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'None'))</p>",
+          "to": "",
+          "subject": {
+            "value": "Gold Pipeline Run: @{pipeline().RunId}",
+            "type": "Expression"
+          }
+        },
+        "externalReferences": {
+          "connection": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Office365Email2",
+        "dependsOn": [
+          {
+            "activity": "load_gold_layer",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

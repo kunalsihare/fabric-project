@@ -1,0 +1,141 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource"
+          },
+          "datasetSettings": {
+            "type": "LakehouseTable",
+            "typeProperties": {
+              "schema": {
+                "value": "@pipeline().libraryVariables.config_schema_name",
+                "type": "Expression"
+              },
+              "table": "cfg_source_details"
+            },
+            "schema": [],
+            "linkedService": {
+              "name": "lh_p3h_p3hp",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "268eb19f-a325-8a2a-4d9f-e221373a2aa8",
+                  "workspaceId": "00000000-0000-0000-0000-000000000000",
+                  "rootFolder": "Tables"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "firstRowOnly": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "read_source_config_table",
+        "dependsOn": []
+      },
+      {
+        "type": "Filter",
+        "typeProperties": {
+          "items": {
+            "value": "@activity('read_source_config_table').output.value",
+            "type": "Expression"
+          },
+          "condition": {
+            "value": "@equals(item().is_active, true)",
+            "type": "Expression"
+          }
+        },
+        "name": "filter_active_sources",
+        "dependsOn": [
+          {
+            "activity": "read_source_config_table",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "batchCount": 1,
+          "items": {
+            "value": "@activity('filter_active_sources').output.Value",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "InvokePipeline",
+              "typeProperties": {
+                "parameters": {
+                  "table_id": {
+                    "value": "@item().table_id",
+                    "type": "Expression"
+                  },
+                  "folder_path": {
+                    "value": "@item().folder_path",
+                    "type": "Expression"
+                  },
+                  "is_full_load": {
+                    "value": "@item().is_full_load",
+                    "type": "Expression"
+                  },
+                  "file_format": {
+                    "value": "@item().file_format",
+                    "type": "Expression"
+                  },
+                  "delimiter": {
+                    "value": "@item().delimiter",
+                    "type": "Expression"
+                  }
+                },
+                "waitOnCompletion": true,
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "pipelineId": "8805a518-0e58-ac25-4dc8-cd45263a086c",
+                "operationType": "InvokeFabricPipeline"
+              },
+              "externalReferences": {
+                "connection": "00000000-0000-0000-0000-000000000000"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "pl_p3h_bronze_layer_table_load",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "iterating_over_all_tables",
+        "dependsOn": [
+          {
+            "activity": "filter_active_sources",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "libraryVariables": {
+      "config_schema_name": {
+        "type": "String",
+        "variableName": "config_schema_name",
+        "libraryName": "vl_p3h_p3h_variables"
+      }
+    }
+  }
+}

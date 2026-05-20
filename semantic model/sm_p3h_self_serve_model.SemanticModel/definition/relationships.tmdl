@@ -1,0 +1,24 @@
+relationship cb8157f9-d1e0-ad2c-a537-eaa895ff1c80
+	fromColumn: fact_healthcare.diagnosis_sk
+	toColumn: dim_diagnosis.diagnosis_sk
+
+relationship 4ba760d3-20f4-a403-6438-b923a5778357
+	fromColumn: fact_healthcare.member_sk
+	toColumn: dim_member.member_sk
+
+relationship d291304a-96a3-d66e-b9c1-13615924a83e
+	fromColumn: fact_healthcare.date_key
+	toColumn: dimdate.datekey
+
+relationship 17c1ddbe-be4d-bd47-5db6-7e8e0776ebeb
+	fromColumn: fact_healthcare.plan_sk
+	toColumn: dim_plan.plan_sk
+
+relationship 3f57b21f-f746-f344-0bdc-d1bd012a7e06
+	fromColumn: fact_healthcare.procedure_sk
+	toColumn: dim_procedure.procedure_sk
+
+relationship ce57505f-8a03-d479-fd98-5e6d75674fea
+	fromColumn: dim_procedure.procedure_code
+	toColumn: UserSecurityMapping.scope_value
+

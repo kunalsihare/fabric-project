@@ -1,0 +1,69 @@
+table dim_diagnosis
+	lineageTag: 70a5b3cf-36a9-4691-9bf2-b0e3584e37c6
+	sourceLineageTag: [dimension].[dim_diagnosis]
+
+	column diagnosis_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 5783d60f-80b0-433c-ac77-1cfee9f9be59
+		sourceLineageTag: diagnosis_sk
+		summarizeBy: none
+		sourceColumn: diagnosis_sk
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column diagnosis_code
+		dataType: string
+		lineageTag: 5d4afd1f-20db-49e9-9c5b-7c0e37fb1d3c
+		sourceLineageTag: diagnosis_code
+		summarizeBy: none
+		sourceColumn: diagnosis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column diagnosis_desc
+		dataType: string
+		lineageTag: 42c12d25-6556-4726-bbbf-b98e3a46d031
+		sourceLineageTag: diagnosis_desc
+		summarizeBy: none
+		sourceColumn: diagnosis_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: 36e9f1cd-0014-4de4-965f-becf9cce2952
+		sourceLineageTag: category
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column severity
+		dataType: string
+		lineageTag: 8ba67540-54be-4844-a877-c850ef22e217
+		sourceLineageTag: severity
+		summarizeBy: none
+		sourceColumn: severity
+
+		annotation SummarizationSetBy = Automatic
+
+	column load_ts
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 56f7ace5-13e7-4000-aca5-da6670dd7a64
+		sourceLineageTag: load_ts
+		summarizeBy: none
+		sourceColumn: load_ts
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_diagnosis = entity
+		mode: directLake
+		source
+			entityName: dim_diagnosis
+			schemaName: dimension
+			expressionSource: 'DirectLake - wh_p3h_p3h_warehouse'
+

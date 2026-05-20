@@ -1,0 +1,222 @@
+{
+  "properties": {
+    "jobMode": "Batch",
+    "source": {
+      "type": "LakehouseTable",
+      "connectionSettings": {
+        "type": "Lakehouse",
+        "typeProperties": {
+          "workspaceIdVariableLibrary": {
+            "variableName": "WS_ID",
+            "libraryName": "vl_p3h_p3h_variables"
+          },
+          "artifactIdVariableLibrary": {
+            "variableName": "LH_ID",
+            "libraryName": "vl_p3h_p3h_variables"
+          },
+          "rootFolder": "Tables"
+        }
+      }
+    },
+    "destination": {
+      "type": "DataWarehouseTable",
+      "connectionSettings": {
+        "type": "DataWarehouse",
+        "typeProperties": {
+          "workspaceIdVariableLibrary": {
+            "variableName": "WS_ID",
+            "libraryName": "vl_p3h_p3h_variables"
+          },
+          "artifactIdVariableLibrary": {
+            "variableName": "WH_ID",
+            "libraryName": "vl_p3h_p3h_variables"
+          },
+          "endpointVariableLibrary": {
+            "variableName": "WH_SQL_END_POINT",
+            "libraryName": "vl_p3h_p3h_variables"
+          }
+        }
+      }
+    },
+    "policy": {
+      "timeout": "0.12:00:00",
+      "retry": 0
+    }
+  },
+  "activities": [
+    {
+      "id": "b6796b42-372d-4b29-a7f1-dc4fd93e2d44",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dimension",
+            "table": "dim_diagnosis"
+          }
+        },
+        "destination": {
+          "tableOption": "autoCreate",
+          "writeBehavior": "Append",
+          "datasetSettings": {
+            "schema": "dimension",
+            "table": "dim_diagnosis"
+          }
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "4e2f6356-c757-4fc7-a137-0f5c6b48f5be",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dimension",
+            "table": "dim_member"
+          }
+        },
+        "destination": {
+          "tableOption": "autoCreate",
+          "writeBehavior": "Append",
+          "datasetSettings": {
+            "schema": "dimension",
+            "table": "dim_member"
+          }
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "a3356ece-7762-4c6e-aafc-d31d70e52345",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dimension",
+            "table": "dim_plan"
+          }
+        },
+        "destination": {
+          "tableOption": "autoCreate",
+          "writeBehavior": "Append",
+          "datasetSettings": {
+            "schema": "dimension",
+            "table": "dim_plan"
+          }
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "698f09fa-9ee4-4374-8529-98067af4cb37",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dimension",
+            "table": "dim_procedure"
+          }
+        },
+        "destination": {
+          "tableOption": "autoCreate",
+          "writeBehavior": "Append",
+          "datasetSettings": {
+            "schema": "dimension",
+            "table": "dim_procedure"
+          }
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "3452b920-fd35-474a-a4ec-76597f7bc3fb",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "dimension",
+            "table": "dim_provider"
+          }
+        },
+        "destination": {
+          "tableOption": "autoCreate",
+          "writeBehavior": "Append",
+          "datasetSettings": {
+            "schema": "dimension",
+            "table": "dim_provider"
+          }
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    },
+    {
+      "id": "707db269-e0de-4d5f-88bf-02fb7e462af4",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "schema": "fact",
+            "table": "fact_healthcare"
+          }
+        },
+        "destination": {
+          "tableOption": "autoCreate",
+          "writeBehavior": "Append",
+          "datasetSettings": {
+            "schema": "fact",
+            "table": "fact_healthcare"
+          }
+        },
+        "enableStaging": true,
+        "translator": {
+          "type": "TabularTranslator"
+        },
+        "typeConversionSettings": {
+          "typeConversion": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource"
+          },
+          "datasetSettings": {
+            "type": "LakehouseTable",
+            "typeProperties": {
+              "schema": {
+                "value": "@pipeline().libraryVariables.vl_p3h_p3h_variables_config_schema_name",
+                "type": "Expression"
+              },
+              "table": "cfg_table_schema"
+            },
+            "schema": [],
+            "linkedService": {
+              "name": "lh_p3h_p3hp",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "268eb19f-a325-8a2a-4d9f-e221373a2aa8",
+                  "workspaceId": "00000000-0000-0000-0000-000000000000",
+                  "rootFolder": "Tables"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "firstRowOnly": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Lookup_table_config",
+        "dependsOn": []
+      },
+      {
+        "type": "Filter",
+        "typeProperties": {
+          "items": {
+            "value": "@activity('Lookup_table_config').output.value",
+            "type": "Expression"
+          },
+          "condition": {
+            "value": "@and(\n    and(\n        equals(toLower(item().layer),'gold'),\n        equals(item().is_active,true)\n    ),\n    equals(toLower(item().schema_name),'dimension')\n)",
+            "type": "Expression"
+          }
+        },
+        "name": "filter_gold_tables",
+        "dependsOn": [
+          {
+            "activity": "Lookup_table_config",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "isSequential": true,
+          "items": {
+            "value": "@activity('filter_gold_tables').output.value",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "InvokePipeline",
+              "typeProperties": {
+                "parameters": {
+                  "pipeline_run_id": {
+                    "value": "@pipeline().RunId",
+                    "type": "Expression"
+                  },
+                  "pipeline_name": {
+                    "value": "@pipeline().PipelineName",
+                    "type": "Expression"
+                  },
+                  "table_id": {
+                    "value": "@item().table_id",
+                    "type": "Expression"
+                  },
+                  "pipeline_start_time": {
+                    "value": "@pipeline().TriggerTime",
+                    "type": "Expression"
+                  }
+                },
+                "waitOnCompletion": true,
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "pipelineId": "27f0c643-956e-9e2d-416b-d6fda40bbd0c",
+                "operationType": "InvokeFabricPipeline"
+              },
+              "externalReferences": {
+                "connection": "00000000-0000-0000-0000-000000000000"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Invoke_gold_dimension_child_pipeline",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "loop through dim tables",
+        "dependsOn": [
+          {
+            "activity": "filter_gold_tables",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "isSequential": true,
+          "items": {
+            "value": "@activity('Filter_Gold_fact_table').output.value",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "InvokePipeline",
+              "typeProperties": {
+                "parameters": {
+                  "pipeline_run_id": {
+                    "value": "@pipeline().RunId",
+                    "type": "Expression"
+                  },
+                  "pipeline_name": {
+                    "value": "@pipeline().PipelineName",
+                    "type": "Expression"
+                  },
+                  "table_id": {
+                    "value": "@item().table_id",
+                    "type": "Expression"
+                  },
+                  "pipeline_start_time": {
+                    "value": "@pipeline().TriggerTime",
+                    "type": "Expression"
+                  }
+                },
+                "waitOnCompletion": true,
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "pipelineId": "1b855ee8-a84d-b6c6-4a04-8c98b1b7ec78",
+                "operationType": "InvokeFabricPipeline"
+              },
+              "externalReferences": {
+                "connection": "00000000-0000-0000-0000-000000000000"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Invoke_fact_child_pipeline",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "loop through  fact tables",
+        "dependsOn": [
+          {
+            "activity": "Filter_Gold_fact_table",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Filter",
+        "typeProperties": {
+          "items": {
+            "value": "@activity('Lookup_table_config').output.value",
+            "type": "Expression"
+          },
+          "condition": {
+            "value": "@and(\n    and(\n        equals(toLower(item().layer),'gold'),\n        equals(item().is_active,true)\n    ),\n    equals(toLower(item().schema_name),'fact')\n)",
+            "type": "Expression"
+          }
+        },
+        "name": "Filter_Gold_fact_table",
+        "dependsOn": [
+          {
+            "activity": "loop through dim tables",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "libraryVariables": {
+      "vl_p3h_p3h_variables_config_schema_name": {
+        "type": "String",
+        "variableName": "config_schema_name",
+        "libraryName": "vl_p3h_p3h_variables"
+      }
+    },
+    "variables": {
+      "master_run_id": {
+        "type": "String"
+      }
+    }
+  }
+}
