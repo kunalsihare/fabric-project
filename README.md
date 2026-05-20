@@ -1,4 +1,4 @@
-# P3H POC - Healthcare Data Platform
+POC - Healthcare Data Platform
 
 A Healthcare Data Platform built on **Microsoft Fabric** using the **Medallion Architecture** (Bronze → Silver → Gold → Warehouse). This project implements a complete ETL pipeline for healthcare data including members, providers, claims, encounters, and payments.
 
